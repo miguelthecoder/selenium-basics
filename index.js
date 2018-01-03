@@ -1,3 +1,5 @@
+// we are acessing the system
+const fs = require("fs");
 //initiate selenium
 const selenium = require('selenium-webdriver');
 //class definition
@@ -51,7 +53,14 @@ const driver = new selenium.Builder()
 // invitees.forEach(invitee => addInvitee(invitee));
 // the second paremeter in the function refers to the this. keyword
 invitees.forEach(homePage.addInvitee, homePage);
-homePage.removeInvitee('Shadd Anderson');
+
+homePage
+     .findInviteeByName("David Riesz")
+     .remove();
+     
+homePage
+    .findInviteeByName("Jennifer Nordell")
+    .toggleConfirmation();     
 
 // addInvitee("Muhammad Hassan");
 // addInvitee("Laquisha Jones");
@@ -62,7 +71,11 @@ homePage.removeInvitee('Shadd Anderson');
 
 //call the fuction... toggleNonResponsersVisibility()
 
-homePage.toggleNonRespondersVisibility();
+driver.takeScreenshot().then((image, err) => {
+    fs.writeFile("weird-layout.png", image, "base64", 
+    err =>  console.error(err));
+});
+// homePage.toggleNonRespondersVisibility();
 
 //span[text() = "Shadd Anderson"]/..button[last()]
                               // /parent::li

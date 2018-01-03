@@ -14,7 +14,7 @@ class HomePage {
             toggleNonRespondersVisibility: By.css('.main > div input'),
             // backticks are amazing, able to make it more dynamic
             // by ${invitee} will be replaced by whom ever you pass in 
-            removeButtomForInvitee: invitee => By.xpath(`//span[text() = "${invitee}"]/../button[last()]`)
+            inviteeByName: name => By.xpath(`//span[text() = "${name}"]/..`)            
         };
     }
 
@@ -32,15 +32,35 @@ class HomePage {
         this.driver.findElement(this.locators.inviteeForm).submit();
     }
     
-      removeInvitee(invitee) {
-        this.driver.findElement(this.locators.removeButtomForInvitee(invitee))
-            .click();
-    }
     
      toggleNonRespondersVisibility() {
         this.driver.findElement(this.locators.toggleNonRespondersVisibility)
             .click();
     }
+    findInviteeByName(name) {
+        const el = this.driver
+        .findElement(this.locators.inviteeByName(name));
+        return new Invitee(el);
+    }
 }
 
+class  Invitee {
+    constructor(element) {
+        this.element = element;
+        this.locators = {
+            removeButton: By.css("button:last-child"),
+            confirmedCheckbox: By.css("input[type='checkbox']")
+        };
+    }
+    remove() {
+        this.element
+        .findElement(this.locators.removeButton)
+        .click();
+    }
+    toggleConfirmation() {
+        this.element
+        .findElement(this.locators.confirmedCheckbox)
+        .click();
+    }
+}
 module.exports = HomePage;
